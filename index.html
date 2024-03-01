@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            font-size: xx-large;
+            color: red;
+            text-align: center;
+            animation: blinker 5s linear infinite;
+        }
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+        div {
+            display: block;
+            margin: 1rem 0;
+            width: 100%;
+            height: 5vh;
+        }
+
+        input,button,label {
+            height: 100%;
+        }
+
+        label,input {
+            display: inline-block;
+            width: 33%;
+            padding: 0;
+            font-size: x-large;
+            
+        }
+
+        label {
+            border: 0.5px solid black;
+        }
+
+        input {
+            border: 0.5px solid gray;
+        }
+
+        button {
+            width: 10%;
+            font-size: x-large;
+        }
+
+        #terrtoriesCounter {
+            margin-top: 5vh;
+        }
+
+    </style>
+
+</head>
+<body>
+    <h1>RISK</h1>
+    <div>
+        <label>Number of Player</label>
+        <input id="playerNum" type="number" value="2">
+        <button id="addPlayerNum">+</button>
+        <button id="minusPlayerNum">-</button>
+    </div>
+    <div id="terrtoriesCounter">
+        <h2>Number of Terrtories</h2>
+        <div>
+            <input type="text">
+            <input id="terValue1" type="number">
+            <button class="add">+</button>
+            <button class="minus">-</button>
+        </div>
+        <div>
+            <input type="text">
+            <input id="terValue2" type="number">
+            <button class="add">+</button>
+            <button class="minus">-</button>
+        </div>
+    </div>
+    <script>
+        function appendPlayer(){
+            playerNode=document.createElement('div');
+            playerDivHtml=`
+                <input type="text">
+                <input id="terValue${document.querySelector('#playerNum').value}" type="number" readonly>
+                <button class="add">+</button>
+                <button class="minus">-</button>
+            `;
+            playerNode.innerHTML=playerDivHtml;
+            document.querySelector('#terrtoriesCounter').appendChild(playerNode);
+        }
+        document.querySelector('#addPlayerNum').addEventListener('click',function() {
+            document.querySelector('#playerNum').value++;
+            appendPlayer();
+            addHandler();
+        })
+        document.querySelector('#minusPlayerNum').addEventListener('click',function() {
+            if (document.querySelector('#playerNum').value>2) {
+                document.querySelector('#playerNum').value--;
+                wrapperNode=document.querySelector('#terrtoriesCounter')
+                wrapperNode.removeChild(wrapperNode.lastElementChild);
+            }
+        })
+
+    
+        function addHandler(){        
+            playerDivs=document.querySelectorAll('#terrtoriesCounter div');
+            addButtons=document.querySelectorAll('#terrtoriesCounter div .add');
+            minusButtons=document.querySelectorAll('#terrtoriesCounter div .minus');
+
+            for (i=0;i<playerDivs.length;i++) {
+                j=i;
+                terValueId='#terValue'+j;
+                addButtons[i].addEventListener('click',function(){
+                    this.previousSibling.previousSibling.value++;
+                })
+                minusButtons[i].addEventListener('click',function(i){
+                    this.previousSibling.previousSibling.previousSibling.previousSibling.value--;
+                })
+
+            }
+        }
+
+        addHandler();
+       
+
+
+        
+       
+
+
+    </script>
+</body>
+</html>
