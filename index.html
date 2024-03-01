@@ -5,20 +5,28 @@
         body {
             background-color: black;
             color: white;
+            font-size: x-large;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         }
 
         h1 {
             font-size: xx-large;
+            font-weight: bolder ;
+            font-family:Georgia, 'Times New Roman', Times, serif;
             color: red;
             text-align: center;
-            animation: blinker 5s linear infinite;
+            animation: blinker 3s linear infinite;
+        }
+        h2 {
+            font-size: x-large;
+            font-weight: bolder;
         }
         @keyframes blinker {
             50% {
                 opacity: 0;
             }
         }
-        div {
+        div:first-child,#terrtoriesCounter > div {
             display: block;
             margin: 1rem 0;
             width: 100%;
@@ -70,18 +78,56 @@
         <h2>Number of Terrtories</h2>
         <div>
             <input type="text">
-            <input id="terValue1" type="number">
+            <input id="terValue1" type="number" value="21">
             <button class="add">+</button>
             <button class="minus">-</button>
         </div>
         <div>
             <input type="text">
-            <input id="terValue2" type="number">
+            <input id="terValue2" type="number" value="21">
             <button class="add">+</button>
             <button class="minus">-</button>
         </div>
     </div>
+    <div>
+        <p>Total: <span id="totalCount"></span></p>
+    </div>
     <script>
+        for (let element of document.querySelectorAll('button.add')) {
+            element.addEventListener('click',function(){
+                this.previousSibling.previousSibling.value++;
+                AddValue();
+            })
+        }
+
+        for (let element of document.querySelectorAll('button.minus')) {
+            element.addEventListener('click',function(){
+                if (this.previousSibling.previousSibling.previousSibling.previousSibling.value>0) {
+                    this.previousSibling.previousSibling.previousSibling.previousSibling.value--;
+                    AddValue();
+                }
+            })
+        }
+
+        function AddValue() {
+            let totalValue=0;
+            for (let element of document.querySelectorAll("#terrtoriesCounter input[type='number']")) {
+                totalValue=totalValue+parseInt(element.value);
+            }
+            if (totalValue==42) {
+                document.getElementById('totalCount').innerText=totalValue;
+                document.getElementById('totalCount').style.color='white';
+            } else {
+                document.getElementById('totalCount').innerText=totalValue+'(Invalid!)';
+                document.getElementById('totalCount').style.color='red';
+            }
+        }
+        
+
+        for (let element of document.querySelectorAll("#terrtoriesCounter input[type='number']")) {
+            element.addEventListener('change',AddValue)
+        }
+
         function appendPlayer(){
             playerNode=document.createElement('div');
             playerDivHtml=`
@@ -92,11 +138,20 @@
             `;
             playerNode.innerHTML=playerDivHtml;
             document.querySelector('#terrtoriesCounter').appendChild(playerNode);
+            document.querySelector('#terrtoriesCounter > div:last-child >button.add').addEventListener('click',function(){
+                    this.previousSibling.previousSibling.value++;
+                    AddValue();
+            })
+            document.querySelector('#terrtoriesCounter > div:last-child >button.minus').addEventListener('click',function(){
+                if (this.previousSibling.previousSibling.previousSibling.previousSibling.value>0) {
+                    this.previousSibling.previousSibling.previousSibling.previousSibling.value--;
+                    AddValue();
+                }
+            })
         }
         document.querySelector('#addPlayerNum').addEventListener('click',function() {
             document.querySelector('#playerNum').value++;
             appendPlayer();
-            addHandler();
         })
         document.querySelector('#minusPlayerNum').addEventListener('click',function() {
             if (document.querySelector('#playerNum').value>2) {
@@ -106,26 +161,7 @@
             }
         })
 
-    
-        function addHandler(){        
-            playerDivs=document.querySelectorAll('#terrtoriesCounter div');
-            addButtons=document.querySelectorAll('#terrtoriesCounter div .add');
-            minusButtons=document.querySelectorAll('#terrtoriesCounter div .minus');
-
-            for (i=0;i<playerDivs.length;i++) {
-                j=i;
-                terValueId='#terValue'+j;
-                addButtons[i].addEventListener('click',function(){
-                    this.previousSibling.previousSibling.value++;
-                })
-                minusButtons[i].addEventListener('click',function(i){
-                    this.previousSibling.previousSibling.previousSibling.previousSibling.value--;
-                })
-
-            }
-        }
-
-        addHandler();
+        
        
 
 
